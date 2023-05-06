@@ -4,7 +4,8 @@
 
 
 <template>
-  <v-card>
-    <FormComponent />
-  </v-Card>
+<div>
+  login page
+  
+</div>
 </template>

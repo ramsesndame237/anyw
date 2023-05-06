@@ -9,7 +9,7 @@ export default defineComponent({
             type: String,
             required: true
         },
-        submit: {
+        handleSubmit: {
             type: Function,
             required: true
         }
