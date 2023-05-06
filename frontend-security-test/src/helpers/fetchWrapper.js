@@ -1,6 +1,6 @@
-import { useAuthStore } from '@/stores';
+import { useAuthStore } from '../store/auth.store.ts';
 
- const  fetchWrapper = {
+export  const fetchWrapper = {
     get: request('GET'),
     post: request('POST'),
     put: request('PUT'),
@@ -57,4 +57,3 @@ function handleResponse(response) {
     });
 }    
 
-export default fetchWrapper

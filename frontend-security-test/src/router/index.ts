@@ -1,4 +1,5 @@
 // Composables
+import { useAuthStore } from '@/store/auth.store';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -18,9 +19,26 @@ const routes = [
   },
 ]
 
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 })
+
+
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const authStore = useAuthStore();
+
+  if (authRequired && !authStore.user) {
+      return {
+          path: '/login',
+          //@ts-ignore
+          query: { returnUrl: to.href }
+      };
+  }
+});
 
 export default router
