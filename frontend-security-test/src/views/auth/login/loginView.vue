@@ -2,10 +2,37 @@
 
 import { defineComponent } from 'vue';
 import FormComponents from '@/components/FormComponents.vue';
+import { useAuthStore } from '@/store/auth.store';
+import { IUser } from '@/interfaces/UserTypes';
+import router from '@/router';
 
 export default defineComponent({
   components: {
     FormComponents
+  },
+  data:() =>{
+    return{
+      alert:false, 
+      type_error:'sucess', 
+      message:'', 
+      loading:false
+    }
+
+  }, 
+  methods: {
+    handleSubmit(value: IUser) {
+      console.log({ value })
+      const authStore = useAuthStore()
+      this.loading = true
+      authStore.login(value.username ?? '', value.password ?? '').then(() => {
+        router.push('/')
+      }).catch((error) => {
+        this.message = error
+        this.alert = true
+      }).finally(()=>{
+        this.loading = false
+      })
+    }
   }
 })
 
@@ -16,9 +43,18 @@ export default defineComponent({
   <div class="Container-form">
     <v-card class="mx-auto " min-width="400" title="Connection">
       <v-container>
-        <FormComponents  :type-form="'login'" />
+        <FormComponents :loading="loading" :type-form="'login'" @handleSubmit="handleSubmit" />
       </v-container>
     </v-card>
+
+    <v-snackbar
+      :timeout="2000"
+      :color="type_error"
+      variant="tonal"
+      v-if="alert"
+    >
+      {{ message }}
+    </v-snackbar>
 
   </div>
 </template>

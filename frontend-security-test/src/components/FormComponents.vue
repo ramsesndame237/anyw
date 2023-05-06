@@ -7,9 +7,9 @@ export default defineComponent({
 
     typeForm: {
       type: String,
-    },
-    handleSubmit: {
-      type: Function,
+    }, 
+    loading:{
+      type:Boolean
     }
   },
   data: () => {
@@ -31,7 +31,6 @@ export default defineComponent({
         },
       ],
       show1: false,
-      loading: false,
       password: 'mot de passe',
       rules: {
         required: (value:string) => !!value || 'Required.',
@@ -39,6 +38,20 @@ export default defineComponent({
         emailMatch: () => (`The email and password you entered don't match`),
       },
     }
+  }, 
+  methods:{
+   async submit(event:any){
+      const result = await event
+      console.log({result})
+      if(result.valid){
+        if(this.typeForm == 'login'){
+          this.$emit('handleSubmit', {username:this.firstName, password:this.password})
+
+        }
+
+      }
+    }
+
   }
 })
 
@@ -46,7 +59,7 @@ export default defineComponent({
 
 
 <template>
-  <v-form fast-fail @submit.prevent>
+  <v-form fast-fail @submit.prevent ="submit">
     <v-text-field variant="outlined" v-model="firstName" label="Nom utilisateur" :rules="firstNameRules"></v-text-field>
 
     <v-text-field variant="outlined" :prepend-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]"

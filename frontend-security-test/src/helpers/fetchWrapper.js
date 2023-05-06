@@ -15,12 +15,15 @@ function request(method) {
         };
         if (body) {
             requestOptions.headers['Content-Type'] = 'application/json';
+
             requestOptions.body = JSON.stringify(body);
         }
         if (credentials) {
             requestOptions.credentials = credentials;
         }
-        return fetch(url, requestOptions).then(handleResponse);
+        return fetch(url, requestOptions).then(handleResponse).catch((error) =>{
+            console.log({error})
+        });
     }
 }
 
@@ -39,6 +42,7 @@ function authHeader(url) {
 }
 
 function handleResponse(response) {
+    console.log({response})
     return response.text().then(text => {
         const data = text && JSON.parse(text);
         

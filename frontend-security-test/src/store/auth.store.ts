@@ -15,6 +15,7 @@ export const useAuthStore = defineStore({
     }),
     actions: {
         async login(username:string, password:string) {
+            
             this.user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password }, { credentials: 'include' });
             this.startRefreshTokenTimer();
         },
@@ -30,7 +31,7 @@ export const useAuthStore = defineStore({
         },
         startRefreshTokenTimer() {
             // parse json object from base64 encoded jwt token
-            const jwtBase64 = this.user?.jwtToken.split('.')[1];
+            const jwtBase64 = this.user?.jwtToken?.split('.')[1];
             const jwtToken = JSON.parse(Buffer.from(jwtBase64  ?? '').toString());
     
             // set a timeout to refresh the token a minute before it expires

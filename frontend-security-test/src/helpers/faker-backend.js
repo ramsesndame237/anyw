@@ -5,10 +5,17 @@ const usersKey = 'anywr-jwt-refresh-token-users';
 const users = JSON.parse(localStorage.getItem(usersKey)) || [];
 
 
+// add test user and save if users array is empty
+if (!users.length) {
+    users.push({ id: 1,  firstName: 'Test', lastName: 'User', username: 'test', password: 'test', refreshTokens: [] });
+    localStorage.setItem(usersKey, JSON.stringify(users));
+}
+
 
 function fakeBackend() {
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
+        console.log({url})
         return new Promise((resolve, reject) => {
             // wrap in timeout to simulate server api call
             setTimeout(handleRoute, 500);
@@ -36,9 +43,10 @@ function fakeBackend() {
 
             function authenticate() {
                 const { username, password } = body();
+                console.log({username})
                 const user = users.find(x => x.username === username && x.password === password);
 
-                if (!user) return error('Username or password is incorrect');
+                if (!user) return error('nom utilisateur ou mot de passe incorrect');
 
                 // add refresh token to user
                 user.refreshTokens.push(generateRefreshToken());

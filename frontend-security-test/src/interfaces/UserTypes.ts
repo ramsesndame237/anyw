@@ -1,8 +1,8 @@
 export interface IUser{
-    username:string,
-    password:string,
-    email:string, 
-    jwtToken:string
+    username?:string,
+    password?:string,
+    email?:string, 
+    jwtToken?:string
 }
 
 export interface IAuthState{
