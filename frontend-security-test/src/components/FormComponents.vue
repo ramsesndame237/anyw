@@ -31,7 +31,7 @@ export default defineComponent({
         },
       ],
       show1: false,
-      password: 'mot de passe',
+      password: '',
       rules: {
         required: (value:string) => !!value || 'Required.',
         min: (v:string) => v.length >= 8 || 'Min 8 caractère',
@@ -66,6 +66,6 @@ export default defineComponent({
       :type="show1 ? 'text' : 'password'" @click:prepend-inner="show1 = !show1" v-model="email" label="mot de passe"></v-text-field>
     <v-text-field variant="outlined" v-model="password" label="Email" :rules="emailRules" v-if="typeForm != 'login'" ></v-text-field>
 
-    <v-btn type="submit"  :loading="loading" block height="48" class="mt-2">Se Connecter</v-btn>
+    <v-btn type="submit" color="primary"  :loading="loading" block height="48" class="mt-2">Se Connecter</v-btn>
   </v-form>
 </template>
