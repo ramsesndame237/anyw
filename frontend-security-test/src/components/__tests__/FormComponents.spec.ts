@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { mount } from '@vue/test-utils';
-import vuetify from '../../plugins/vuetify';
 
 import FormComponents from '../FormComponents.vue';
 
@@ -16,6 +15,6 @@ describe('FormComponent', () => {
 
 
   it('renders properly', () => {
-    expect(wrapper.text()).toContain('Hello Vitest');
+    expect(wrapper.text()).toContain('email');
   });
 });
