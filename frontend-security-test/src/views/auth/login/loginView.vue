@@ -4,7 +4,7 @@
 
 
 <template>
-    <div>
-        this is the login page
-    </div>
+  <v-card>
+    <FormComponent />
+  </v-Card>
 </template>
