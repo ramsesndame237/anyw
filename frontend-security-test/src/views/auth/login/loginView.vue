@@ -10,26 +10,36 @@ export default defineComponent({
   components: {
     FormComponents
   },
-  data:() =>{
-    return{
-      alert:false, 
-      type_error:'sucess', 
-      message:'', 
-      loading:false
+  data: () => {
+    return {
+      alert: false,
+      type_error: 'sucess',
+      message: '',
+      loading: false
     }
 
-  }, 
+  },
   methods: {
     handleSubmit(value: IUser) {
       console.log({ value })
       const authStore = useAuthStore()
       this.loading = true
-      authStore.login(value.username ?? '', value.password ?? '').then(() => {
-        router.push('/')
-      }).catch((error) => {
-        this.message = error
+      authStore.login(value.username ?? '', value.password ?? '').then((response) => {
+
+        console.log(response)
+        if (response?.status == 400) {
+          this.type_error = 'error'
+          this.message = response.error
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+          }, 2000)
+        } else {
+          router.push('/')
+        }
+      }).catch(async (error) => {
         this.alert = true
-      }).finally(()=>{
+      }).finally(() => {
         this.loading = false
       })
     }
@@ -46,15 +56,8 @@ export default defineComponent({
         <FormComponents :loading="loading" :type-form="'login'" @handleSubmit="handleSubmit" />
       </v-container>
     </v-card>
-
-    <v-snackbar
-      :timeout="2000"
-      :color="type_error"
-      variant="tonal"
-      v-if="alert"
-    >
-      {{ message }}
-    </v-snackbar>
+    <v-alert v-if="alert" style="position: absolute;top: 5px; right: 0px;" :color="type_error" icon="$success"
+      :text="message"></v-alert>
 
   </div>
 </template>
