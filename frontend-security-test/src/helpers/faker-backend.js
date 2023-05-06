@@ -25,6 +25,8 @@ function fakeBackend() {
                 switch (true) {
                     case url.endsWith('/users/authenticate') && method === 'POST':
                         return authenticate();
+                    case url.endsWith('/users/register') && method === 'POST':
+                        return register();
                     case url.endsWith('/users/refresh-token') && method === 'POST':
                         return refreshToken();
                     case url.endsWith('/users/revoke-token') && method === 'POST':
@@ -40,6 +42,23 @@ function fakeBackend() {
             }
 
             // route functions
+
+            function register(){
+                const {username, password, firstName, lastName, email} = body();
+                const user = users.find(x => x.username === username || email === email);
+                if(user) return error('Un utilisateur existe déjà avec ses informations')
+
+                let oldUser = JSON.parse(localStorage.getItem(usersKey))
+
+                oldUser.push({id:oldUser.length + 1, firstName:firstName, lastName:lastName,email:email,password:password,username:username, refreshTokens:[]})
+                localStorage.setItem(usersKey, JSON.stringify(oldUser));
+
+                return ok({
+                    message : 'votre compte à été créer avec succès'
+                })
+
+        
+            }
 
             function authenticate() {
                 const { username, password } = body();

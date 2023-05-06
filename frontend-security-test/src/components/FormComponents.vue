@@ -27,7 +27,7 @@ export default defineComponent({
         (value: string) => {
           if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
 
-          return 'Email invalide .'
+          return 'Email invalide.'
         },
       ],
       show1: false,

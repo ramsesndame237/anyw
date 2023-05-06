@@ -10,12 +10,12 @@ export default defineComponent({
   components: {
     FormComponents
   },
-  data: () => {
-    return {
-      alert: false,
-      type_error: 'sucess',
-      message: '',
-      loading: false
+  data:() =>{
+    return{
+      alert:false, 
+      type_error:'sucess', 
+      message:'', 
+      loading:false
     }
 
   },
@@ -24,21 +24,12 @@ export default defineComponent({
       console.log({ value })
       const authStore = useAuthStore()
       this.loading = true
-      authStore.login(value.username ?? '', value.password ?? '').then((response) => {
-
-        console.log(response)
-        if (response?.status == 400) {
-          this.type_error = 'error'
-          this.message = response.error
-          this.alert = true
-          setTimeout(() => {
-            this.alert = false
-          }, 2000)
-        } else {
-          router.push('/')
-        }
-      }).catch(async (error) => {
-      }).finally(() => {
+      authStore.login(value.username ?? '', value.password ?? '').then(() => {
+        router.push('/')
+      }).catch((error) => {
+        this.message = error
+        this.alert = true
+      }).finally(()=>{
         this.loading = false
       })
     }
@@ -55,6 +46,12 @@ export default defineComponent({
         <FormComponents :loading="loading" :type-form="'login'" @handleSubmit="handleSubmit" />
       </v-container>
     </v-card>
+    <div>
+      <span>
+        Vouns n'avez pas de compte <a href="/register">S'enregistrer</a>
+      </span>
+    </div>
+    
     <v-alert v-if="alert" style="position: absolute;top: 5px; right: 0px;" :color="type_error" icon="$success"
       :text="message"></v-alert>
 
@@ -66,6 +63,7 @@ export default defineComponent({
   height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: url('https://www.anywr-group.com/hs-fs/hubfs/MicrosoftTeams-image-Feb-09-2023-02-07-12-9757-PM.png?height=550&name=MicrosoftTeams-image-Feb-09-2023-02-07-12-9757-PM.png');

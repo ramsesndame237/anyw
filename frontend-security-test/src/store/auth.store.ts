@@ -18,11 +18,23 @@ export const useAuthStore = defineStore({
         async login(username:string, password:string) {
             
             this.user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password }, { credentials: 'include' });
+            console.log("userslsl", this.user)
             if((this.user as string) == 'nom utilisateur ou mot de passe incorrect'){
                 return {status:400, error:'nom utilisateur ou mot de passe incorrect'}
             }else{
                 this.startRefreshTokenTimer();
             }
+        },
+
+        async register(username:string,password:string,firstName:string,lastName:string,email:string){
+
+            this.user = await fetchWrapper.post(`${baseUrl}/register`,{username, password,lastName, firstName,email}, {credentials:'include'} )
+            if(this.user as string == 'Un utilisateur existe déjà avec ses informations'){
+                return {status:400, error:'Un utilisateur existe déjà avec ses informations'}
+            }else{
+                return {status:200, error:'votre compte à été créer avec succès'}
+            }
+
         },
         logout() {
             fetchWrapper.post(`${baseUrl}/revoke-token`, {}, { credentials: 'include' });
