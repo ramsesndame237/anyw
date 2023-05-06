@@ -27,7 +27,7 @@ import router from '@/router';
 import { defineComponent } from 'vue';
 export default defineComponent({
   methods:{
-    gotToProfil:{
+    gotToProfil(){
       router.push('/profil')
     }
   }

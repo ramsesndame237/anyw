@@ -46,7 +46,6 @@ export default defineComponent({
       if(result.valid){
         if(this.typeForm == 'login'){
           this.$emit('handleSubmit', {username:this.firstName, password:this.password})
-
         }
 
       }
@@ -63,8 +62,8 @@ export default defineComponent({
     <v-text-field variant="outlined" v-model="firstName" label="Nom utilisateur" :rules="firstNameRules"></v-text-field>
 
     <v-text-field variant="outlined" :prepend-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]"
-      :type="show1 ? 'text' : 'password'" @click:prepend-inner="show1 = !show1" v-model="email" label="mot de passe"></v-text-field>
-    <v-text-field variant="outlined" v-model="password" label="Email" :rules="emailRules" v-if="typeForm != 'login'" ></v-text-field>
+      :type="show1 ? 'text' : 'password'" @click:prepend-inner="show1 = !show1" v-model="password" label="mot de passe"></v-text-field>
+    <v-text-field variant="outlined" v-model="email" label="Email" :rules="emailRules" v-if="typeForm != 'login'" ></v-text-field>
 
     <v-btn type="submit" color="primary"  :loading="loading" block height="48" class="mt-2">Se Connecter</v-btn>
   </v-form>

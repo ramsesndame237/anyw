@@ -38,7 +38,6 @@ export default defineComponent({
           router.push('/')
         }
       }).catch(async (error) => {
-        this.alert = true
       }).finally(() => {
         this.loading = false
       })

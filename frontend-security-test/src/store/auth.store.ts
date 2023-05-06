@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { fetchWrapper} from '../helpers/fetchWrapper.js';
 import router from '@/router'
 import { IAuthState } from '@/interfaces/UserTypes';
+import { Buffer } from 'buffer';
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
 
@@ -17,7 +18,11 @@ export const useAuthStore = defineStore({
         async login(username:string, password:string) {
             
             this.user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password }, { credentials: 'include' });
-            this.startRefreshTokenTimer();
+            if((this.user as string) == 'nom utilisateur ou mot de passe incorrect'){
+                return {status:400, error:'nom utilisateur ou mot de passe incorrect'}
+            }else{
+                this.startRefreshTokenTimer();
+            }
         },
         logout() {
             fetchWrapper.post(`${baseUrl}/revoke-token`, {}, { credentials: 'include' });
@@ -32,12 +37,18 @@ export const useAuthStore = defineStore({
         startRefreshTokenTimer() {
             // parse json object from base64 encoded jwt token
             const jwtBase64 = this.user?.jwtToken?.split('.')[1];
-            const jwtToken = JSON.parse(Buffer.from(jwtBase64  ?? '').toString());
+            console.log(jwtBase64  ?? '')
+            const dataJWt = jwtBase64  ?? ""
+            if(dataJWt != ''){
+                const jwtToken = JSON.parse(atob(dataJWt));
+                
+                // set a timeout to refresh the token a minute before it expires
+                const expires = new Date(jwtToken.exp * 1000);
+                const timeout = expires.getTime() - Date.now() - (60 * 1000);
+                this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
+            }
+           
     
-            // set a timeout to refresh the token a minute before it expires
-            const expires = new Date(jwtToken.exp * 1000);
-            const timeout = expires.getTime() - Date.now() - (60 * 1000);
-            this.refreshTokenTimeout = setTimeout(this.refreshToken, timeout);
         },    
         stopRefreshTokenTimer() {
             clearTimeout(this.refreshTokenTimeout);
