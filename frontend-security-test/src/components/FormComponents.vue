@@ -44,9 +44,8 @@ export default defineComponent({
       const result = await event
       console.log({result})
       if(result.valid){
-        if(this.typeForm == 'login'){
-          this.$emit('handleSubmit', {username:this.firstName, password:this.password})
-        }
+        this.$emit('handleSubmit', this.typeForm == 'login' ? {username:this.firstName, password:this.password} : {username:this.firstName,password:this.password,email:this.email})
+        
 
       }
     }

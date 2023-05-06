@@ -17,10 +17,12 @@ function request(method) {
             requestOptions.headers['Content-Type'] = 'application/json';
 
             requestOptions.body = JSON.stringify(body);
+            
         }
         if (credentials) {
             requestOptions.credentials = credentials;
         }
+        console.log({requestOptions})
         return fetch(url, requestOptions).then(handleResponse).catch((error) =>{
             console.log({error})
         });

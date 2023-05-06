@@ -45,18 +45,23 @@ function fakeBackend() {
 
             function register(){
                 const {username, password, firstName, lastName, email} = body();
-                const user = users.find(x => x.username === username || email === email);
-                if(user) return error('Un utilisateur existe déjà avec ses informations')
+                const user = users.find(x => x.username === username);
+                console.log(user)
+                if(user){
+                    error('Un utilisateur existe déjà avec ses informations')
+                }
 
-                let oldUser = JSON.parse(localStorage.getItem(usersKey))
+               else{
+                console.log({users})
 
-                oldUser.push({id:oldUser.length + 1, firstName:firstName, lastName:lastName,email:email,password:password,username:username, refreshTokens:[]})
-                localStorage.setItem(usersKey, JSON.stringify(oldUser));
+                users.push({id:users.length + 1, firstName:firstName, lastName:lastName,email:email,password:password,username:username, refreshTokens:[]})
+                localStorage.setItem(usersKey, JSON.stringify(users));
 
                 return ok({
                     message : 'votre compte à été créer avec succès'
                 })
 
+               }
         
             }
 

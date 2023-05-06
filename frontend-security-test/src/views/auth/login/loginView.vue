@@ -24,12 +24,23 @@ export default defineComponent({
       console.log({ value })
       const authStore = useAuthStore()
       this.loading = true
-      authStore.login(value.username ?? '', value.password ?? '').then(() => {
-        router.push('/')
-      }).catch((error) => {
-        this.message = error
+      authStore.login(value.username ?? '', value.password ?? '').then((response) => {
+
+        console.log(response)
+        if (response?.status == 400) {
+          this.type_error = 'error'
+          this.message = response.error
+          this.alert = true
+          setTimeout(() => {
+            this.alert = false
+          }, 2000)
+        } else {
+          console.log("ldldldldl")
+          router.push('/')
+        }
+      }).catch(async (error) => {
         this.alert = true
-      }).finally(()=>{
+      }).finally(() => {
         this.loading = false
       })
     }
