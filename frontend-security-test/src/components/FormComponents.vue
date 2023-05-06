@@ -1,75 +1,52 @@
-<template>
-  <v-container class="fill-height">
-    <v-responsive class="d-flex align-center text-center fill-height">
-      <v-img height="300" src="@/assets/logo.svg" />
+<script lang="ts" >
 
-      <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
+import { defineComponent } from 'vue';
 
-      <h1 class="text-h2 font-weight-bold">Vuetify</h1>
+export default defineComponent({
+    props: {
 
-      <div class="py-14" />
+        typeForm: {
+            type: String,
+            required: true
+        },
+        submit: {
+            type: Function,
+            required: true
+        }
+    },
+    data: () => {
+        return {
+            firstName: '',
+            firstNameRules: [
+                (value: string) => {
+                    if (value?.length > 3) return true
 
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="auto">
-          <v-btn
-            href="https://vuetifyjs.com/components/all/"
-            min-width="164"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          >
-            <v-icon
-              icon="mdi-view-dashboard"
-              size="large"
-              start
-            />
+                    return 'First name must be at least 3 characters.'
+                },
+            ],
+            email: '',
+            emailRules: [
+                (value: string) => {
+                    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
 
-            Components
-          </v-btn>
-        </v-col>
+                    return 'Must be a valid e-mail.'
+                },
+            ]
+        }
+    }
+})
 
-        <v-col cols="auto">
-          <v-btn
-            color="primary"
-            href="https://vuetifyjs.com/introduction/why-vuetify/#feature-guides"
-            min-width="228"
-            rel="noopener noreferrer"
-            size="x-large"
-            target="_blank"
-            variant="flat"
-          >
-            <v-icon
-              icon="mdi-speedometer"
-              size="large"
-              start
-            />
-
-            Get Started
-          </v-btn>
-        </v-col>
-
-        <v-col cols="auto">
-          <v-btn
-            href="https://community.vuetifyjs.com/"
-            min-width="164"
-            rel="noopener noreferrer"
-            target="_blank"
-            variant="text"
-          >
-            <v-icon
-              icon="mdi-account-group"
-              size="large"
-              start
-            />
-
-            Community
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-responsive>
-  </v-container>
-</template>
-
-<script setup lang="ts">
-  //
 </script>
+
+
+<template>
+    <v-sheet width="300" class="mx-auto">
+        <v-form fast-fail @submit.prevent>
+            <v-text-field v-model="firstName" label="First name" :rules="firstNameRules"></v-text-field>
+
+            <v-text-field v-model="email" label="Last name" :rules="emailRules"></v-text-field>
+
+            <v-btn type="submit" block class="mt-2">Submit</v-btn>
+        </v-form>
+    </v-sheet>
+</template>
