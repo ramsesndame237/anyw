@@ -64,6 +64,6 @@ export default defineComponent({
       :type="show1 ? 'text' : 'password'" @click:prepend-inner="show1 = !show1" v-model="password" label="mot de passe"></v-text-field>
     <v-text-field variant="outlined" v-model="email" label="Email" :rules="emailRules" v-if="typeForm != 'login'" ></v-text-field>
 
-    <v-btn type="submit" color="primary"  :loading="loading" block height="48" class="mt-2">Se Connecter</v-btn>
+    <v-btn type="submit" color="primary"  :loading="loading" block height="48" class="mt-2">{{typeForm == 'login' ?  "Se Connecter" : "S'inscrire"}}</v-btn>
   </v-form>
 </template>

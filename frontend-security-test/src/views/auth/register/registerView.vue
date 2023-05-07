@@ -56,7 +56,7 @@ export default defineComponent({
 
 <template>
     <div class="Container-form">
-        <v-card class="mx-auto " min-width="400" title="Connection">
+        <v-card class="mx-auto " min-width="400" title="Inscription">
             <v-container>
                 <FormComponents :loading="loading" :type-form="'register'" @handleSubmit="handleSubmit" />
             </v-container>
