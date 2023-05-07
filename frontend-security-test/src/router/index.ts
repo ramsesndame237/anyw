@@ -13,14 +13,19 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
       },
       {
-        path:'/login', 
-        name:'Login', 
-        component: ()=> import('@/views/auth/login/loginView.vue')
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/views/auth/login/loginView.vue')
       },
       {
-        path:'/register',
-        name:'Register', 
-        component:()=>import('@/views/auth/register/registerView.vue')
+        path: '/register',
+        name: 'Register',
+        component: () => import('@/views/auth/register/registerView.vue')
+      },
+      {
+        path: '/profil',
+        name: 'Profil',
+        component: () => import('@/views/Profile/Profile.vue')
       }
     ],
   },
@@ -38,14 +43,24 @@ router.beforeEach(async (to) => {
   const publicPages = ['/login', '/register'];
   const authRequired = !publicPages.includes(to.path);
   const authStore = useAuthStore();
+  const userConnect = JSON.parse(localStorage.getItem('user_connect') ?? '')
 
-  if (authRequired && !authStore.user) {
+  if (userConnect.lenght != 0) {
+    return {
+      path: '/',
+      //@ts-ignore
+      query: { returnUrl: to.href }
+    };
+  } else {
+    if (authRequired && !authStore.user) {
       return {
-          path: '/login',
-          //@ts-ignore
-          query: { returnUrl: to.href }
+        path: '/login',
+        //@ts-ignore
+        query: { returnUrl: to.href }
       };
+    }
   }
+
 });
 
 export default router

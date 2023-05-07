@@ -23,6 +23,7 @@ export const useAuthStore = defineStore({
                 return {status:400, error:'nom utilisateur ou mot de passe incorrect'}
             }else{
                 this.startRefreshTokenTimer();
+                localStorage.setItem('user_connect', JSON.stringify(this.user))
             }
         },
 
@@ -40,6 +41,7 @@ export const useAuthStore = defineStore({
             fetchWrapper.post(`${baseUrl}/revoke-token`, {}, { credentials: 'include' });
             this.stopRefreshTokenTimer();
             this.user = null;
+            localStorage.removeItem('user_connect')
             router.push('/login');
         },
         async refreshToken() {

@@ -4,11 +4,11 @@
       <img src="https://img.newstank.fr/image/b7c5e21c5e5e2c6158f016811c6c992b/465/218/cooptalis-devient-anywr.jpg"
         alt="anywr">
       <div>
-        <p>
-          eader du recrutement international et de la mobilité professionnelle
-        </p>
+        <h1 class="text-white" >
+          Leader du recrutement international et de la mobilité professionnelle
+        </h1>
       </div>
-      <v-chip
+      <v-btn
       class="ma-2"
       color="primary"
       variant="elevated"
@@ -16,7 +16,16 @@
     >
       Profil
       <v-icon end icon="mdi-account-outline"></v-icon>
-    </v-chip>
+    </v-btn>
+      <v-btn
+      class="ma-2"
+      color="primary"
+      variant="elevated"
+      @click="logout"
+    >
+      Deconnection
+      <v-icon end icon="mdi-logout"></v-icon>
+    </v-btn>
     </div>
 
   </main>
@@ -25,10 +34,14 @@
 <script lang="ts">
 import router from '@/router';
 import { defineComponent } from 'vue';
+import { useAuthStore } from '@/store/auth.store';
 export default defineComponent({
   methods:{
     gotToProfil(){
       router.push('/profil')
+    }, 
+    logout(){
+      useAuthStore().logout()
     }
   }
 })

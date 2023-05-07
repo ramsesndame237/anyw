@@ -7,7 +7,7 @@ const users = JSON.parse(localStorage.getItem(usersKey)) || [];
 
 // add test user and save if users array is empty
 if (!users.length) {
-    users.push({ id: 1,  firstName: 'Test', lastName: 'User', username: 'test', password: 'test', refreshTokens: [] });
+    users.push({ id: 1, firstName: 'Test', lastName: 'User', username: 'test', password: 'test',email:'test@gmail.com', refreshTokens: [] });
     localStorage.setItem(usersKey, JSON.stringify(users));
 }
 
@@ -15,13 +15,13 @@ if (!users.length) {
 function fakeBackend() {
     let realFetch = window.fetch;
     window.fetch = function (url, opts) {
-        console.log({url})
+        console.log({ url })
         return new Promise((resolve, reject) => {
             // wrap in timeout to simulate server api call
             setTimeout(handleRoute, 500);
 
-            function handleRoute() {   
-                const { method } = opts;             
+            function handleRoute() {
+                const { method } = opts;
                 switch (true) {
                     case url.endsWith('/users/authenticate') && method === 'POST':
                         return authenticate();
@@ -43,33 +43,34 @@ function fakeBackend() {
 
             // route functions
 
-            function register(){
-                const {username, password, firstName, lastName, email} = body();
+            function register() {
+                const { username, password, firstName, lastName, email } = body();
                 const user = users.find(x => x.username === username);
                 console.log(user)
-                if(user){
+                if (user) {
                     error('Un utilisateur existe déjà avec ses informations')
                 }
 
-               else{
-                console.log({users})
+                else {
+                    console.log({ users })
 
-                users.push({id:users.length + 1, firstName:firstName, lastName:lastName,email:email,password:password,username:username, refreshTokens:[]})
-                localStorage.setItem(usersKey, JSON.stringify(users));
+                    users.push({ id: users.length + 1, firstName: firstName, lastName: lastName, email: email, password: password, username: username, refreshTokens: [] })
+                    localStorage.setItem(usersKey, JSON.stringify(users));
 
-                return ok({
-                    message : 'votre compte à été créer avec succès'
-                })
+                    return ok({
+                        message: 'votre compte à été créer avec succès'
+                    })
 
-               }
-        
+                }
+
             }
 
             function authenticate() {
                 const { username, password } = body();
-                console.log({username})
+                console.log({ username })
                 const user = users.find(x => x.username === username && x.password === password);
-
+                console.log({ user })
+            
                 if (!user) return error('nom utilisateur ou mot de passe incorrect');
 
                 // add refresh token to user
@@ -81,17 +82,18 @@ function fakeBackend() {
                     username: user.username,
                     firstName: user.firstName,
                     lastName: user.lastName,
+                    email:user.email,
                     jwtToken: generateJwtToken()
                 })
             }
 
             function refreshToken() {
                 const refreshToken = getRefreshToken();
-                
+
                 if (!refreshToken) return unauthorized();
 
                 const user = users.find(x => x.refreshTokens.includes(refreshToken));
-                
+
                 if (!user) return unauthorized();
 
                 // replace old refresh token with a new one and save
@@ -110,10 +112,10 @@ function fakeBackend() {
 
             function revokeToken() {
                 if (!isLoggedIn()) return unauthorized();
-                
+
                 const refreshToken = getRefreshToken();
                 const user = users.find(x => x.refreshTokens.includes(refreshToken));
-                
+
                 // revoke token and save
                 user.refreshTokens = user.refreshTokens.filter(x => x !== refreshToken);
                 localStorage.setItem(usersKey, JSON.stringify(users));
@@ -165,7 +167,7 @@ function fakeBackend() {
 
             function generateJwtToken() {
                 // create token that expires in 15 minutes
-                const tokenPayload = { exp: Math.round(new Date(Date.now() + 15*60*1000).getTime() / 1000) }
+                const tokenPayload = { exp: Math.round(new Date(Date.now() + 15 * 60 * 1000).getTime() / 1000) }
                 return `fake-jwt-token.${btoa(JSON.stringify(tokenPayload))}`;
             }
 
@@ -173,7 +175,7 @@ function fakeBackend() {
                 const token = new Date().getTime().toString();
 
                 // add token cookie that expires in 7 days
-                const expires = new Date(Date.now() + 7*24*60*60*1000).toUTCString();
+                const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
                 document.cookie = `fakeRefreshToken=${token}; expires=${expires}; path=/`;
 
                 return token;
