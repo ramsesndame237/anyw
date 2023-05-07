@@ -30,7 +30,8 @@ export const useAuthStore = defineStore({
         async register(username:string,password:string,firstName:string,lastName:string,email:string){
 
             this.user = await fetchWrapper.post(`${baseUrl}/register`,{username, password,lastName, firstName,email}, {credentials:'include'} )
-            if(this.user as string == 'Un utilisateur existe déjà avec ses informations'){
+            console.log(this.user)
+            if(this.user == undefined){
                 return {status:400, error:'Un utilisateur existe déjà avec ses informations'}
             }else{
                 return {status:200, error:'votre compte à été créer avec succès'}

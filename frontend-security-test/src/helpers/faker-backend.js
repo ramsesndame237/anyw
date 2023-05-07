@@ -45,10 +45,10 @@ function fakeBackend() {
 
             function register() {
                 const { username, password, firstName, lastName, email } = body();
-                const user = users.find(x => x.username === username);
+                const user = users.find(x => (x.username === username || x.email == email));
                 console.log(user)
                 if (user) {
-                    return {status:400, error: 'Un utilisateur existe déjà avec ses informations'}
+                    return error('Un utilisateur existe déjà avec ses informations')
                 }
 
                 else {
