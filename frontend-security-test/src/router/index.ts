@@ -43,22 +43,13 @@ router.beforeEach(async (to) => {
   const publicPages = ['/login', '/register'];
   const authRequired = !publicPages.includes(to.path);
   const authStore = useAuthStore();
-  const userConnect = JSON.parse(localStorage.getItem('user_connect') ?? '')
-
-  if (userConnect.lenght != 0) {
+  
+  if (authRequired && !authStore.user) {
     return {
-      path: '/',
+      path: '/login',
       //@ts-ignore
       query: { returnUrl: to.href }
     };
-  } else {
-    if (authRequired && !authStore.user) {
-      return {
-        path: '/login',
-        //@ts-ignore
-        query: { returnUrl: to.href }
-      };
-    }
   }
 
 });

@@ -48,7 +48,7 @@ function fakeBackend() {
                 const user = users.find(x => x.username === username);
                 console.log(user)
                 if (user) {
-                    error('Un utilisateur existe déjà avec ses informations')
+                    return {status:400, error: 'Un utilisateur existe déjà avec ses informations'}
                 }
 
                 else {
@@ -140,6 +140,7 @@ function fakeBackend() {
 
             function error(message) {
                 resolve({ status: 400, text: () => Promise.resolve(JSON.stringify({ message })) })
+                return {statut: 400, error:Promise.resolve(JSON.stringify(message))}
             }
 
             function isLoggedIn() {

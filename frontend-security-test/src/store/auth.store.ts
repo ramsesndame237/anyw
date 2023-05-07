@@ -19,7 +19,7 @@ export const useAuthStore = defineStore({
             
             this.user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password }, { credentials: 'include' });
             console.log("userslsl", this.user)
-            if((this.user as string) == 'nom utilisateur ou mot de passe incorrect'){
+            if(this.user == undefined){
                 return {status:400, error:'nom utilisateur ou mot de passe incorrect'}
             }else{
                 this.startRefreshTokenTimer();
